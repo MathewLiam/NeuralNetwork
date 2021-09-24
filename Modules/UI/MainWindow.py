@@ -1,12 +1,17 @@
 from PyQt5 import QtWidgets
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMenuBar
 from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg
-from UI.Shared import MenuBar
+from Modules.UI.Shared import MenuBar
+import os
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
+        self.setWindowTitle("Neural Network")
+        print(os.getcwd())
+        self.setWindowIcon(QIcon(os.path.join(os.getcwd(), 'white_business_office_presentation_work_icon_192531.ico')))
         self.setMenuBar(MenuBar.MenuBar())
         self.graphWidget = pg.PlotWidget()
         self.setCentralWidget(self.graphWidget)
