@@ -10,7 +10,6 @@ WORKDIR /
 
 RUN python -m pip install --upgrade pip
 RUN pip install pylint
-RUN pip install unittest
 RUN pip install coverage
 
 RUN mkdir -p /.cache/pylint
