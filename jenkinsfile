@@ -9,5 +9,14 @@ pipeline {
                 sh 'pylint --rcfile=pylintrc $(find . -iname "*.py")'
             }
         }
+        stage('Test') {
+            agent {
+                dockerfile true
+            }
+            steps {
+                sh 'py -m coverage run --rcfile=.coveragerc -m unittest discover -s src -p "*_spec.py" --verbose -b'
+                sh 'py -m coverage report --rcfile=.coveragerc'
+            }
+        }
     }
 }
