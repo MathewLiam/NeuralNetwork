@@ -1,22 +1,29 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'python:3-alpine'
+            args '-v //var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
     stages {
-        stage('Lint') { 
-            agent {
-                dockerfile true
-            }
+        stage('Lint') {
             steps {
+                sh 'pip install pylint'
                 sh 'pylint --rcfile=pylintrc $(find . -iname "*.py")'
             }
         }
         stage('Test') {
-            agent {
-                dockerfile true
-            }
             steps {
+                sh 'pip install coverage'
                 sh 'python -m coverage run --rcfile=.coveragerc -m unittest discover -s src -p "*_spec.py" --verbose -b'
                 sh 'python -m coverage html --rcfile=.coveragerc'
             }
+        }
+        stage('Build') {
+
+        }
+        stage('publish') {
+
         }
     }
 }
