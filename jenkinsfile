@@ -15,7 +15,7 @@ pipeline {
             }
             steps {
                 sh 'python -m coverage run --rcfile=.coveragerc -m unittest discover -s src -p "*_spec.py" --verbose -b'
-                sh 'python -m coverage report --rcfile=.coveragerc'
+                sh 'python -m coverage html --rcfile=.coveragerc'
             }
         }
     }
