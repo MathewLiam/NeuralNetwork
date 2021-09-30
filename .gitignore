@@ -3,3 +3,5 @@ build
 dist
 htmlcov
 **/*.coverage
+.pytest_cache
+*.egg-info
