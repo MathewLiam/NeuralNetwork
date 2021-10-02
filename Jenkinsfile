@@ -22,6 +22,9 @@ pipeline {
             }
         }
         stage('publish') {
+            when {
+                branch 'master'
+            }
             steps {
                 sh 'python -m twine upload -u ${PYPI_USERNAME} -p ${PYPI_API_TOKEN} dist/*'
             }
