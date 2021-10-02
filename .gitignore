@@ -1,3 +1,4 @@
+# build files and code quality gate files
 **/__pycache__
 build
 dist
@@ -5,3 +6,5 @@ htmlcov
 **/*.coverage
 .pytest_cache
 *.egg-info
+**/*.pyo
+pylint-report

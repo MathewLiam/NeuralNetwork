@@ -1,6 +1,6 @@
 from tkinter import Menu
 
-class MenuBar(Menu):
+class menu_bar(Menu):
     def __init__(self, tk):
         super().__init__(tk)
         

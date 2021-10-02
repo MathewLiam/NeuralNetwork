@@ -1,12 +1,17 @@
-from .Layer import Layer
-from .Neuron import Neuron
-from numpy import random as nprand
+"""MODULE: network - for creating networks to learn from input data"""
+
 from random import random
+from .layer import Layer
 
 class Network:
+    """Defines the Network class, used to learn and then make predictions/recommendations on a known topic"""
     LEARNING_RATE = 0.5
 
-    def __init__(self, amt_input_neurons, amt_hidden_layers, amt_hidden_neurons, amt_output_neurons):
+    def __init__(self,
+                amt_input_neurons,
+                amt_hidden_layers,
+                amt_hidden_neurons,
+                amt_output_neurons):
         """Creates a new neural network
 
         Args:
@@ -23,46 +28,44 @@ class Network:
         self.hidden_layers = []
         self.initialise_layers()
         self.train([[random(), random()] for i in range(5)], [1, 0, 1, 1, 0])
-        
 
     def initialise_layers(self):
         """Initializes the network layers.
         """
-        self.inputLayer = Layer(self.amt_input_neurons, 0, random(), None, True)
-        hiddenLayer = Layer(self.amt_hidden_neurons, self.amt_input_neurons, random(), None)
-        self.hidden_layers.append(hiddenLayer)
-        self.inputLayer.nextLayer = hiddenLayer
-        for count in range(self.amt_hidden_layers - 1):
-            hiddenLayer.nextLayer = Layer(self.amt_hidden_neurons, self.amt_hidden_neurons, random(), None)
-            
-            if not hiddenLayer.nextLayer:
+        self.input_layer = Layer(self.amt_input_neurons, 0, random(), None, True)
+        hidden_layer = Layer(self.amt_hidden_neurons, self.amt_input_neurons, random(), None)
+        self.hidden_layers.append(hidden_layer)
+        self.input_layer.nextLayer = hidden_layer
+        for _ in range(self.amt_hidden_layers - 1):
+            hidden_layer.nextLayer = Layer(self.amt_hidden_neurons, self.amt_hidden_neurons, random(), None)
+            if not hidden_layer.nextLayer:
                 break
-            
-            hiddenLayer = hiddenLayer.nextLayer
-            self.hidden_layers.append(hiddenLayer)
-        
-        hiddenLayer.nextLayer = self.output_layer = Layer(self.amt_output_neurons, self.amt_hidden_neurons, random(), None)
-        
+
+            hidden_layer = hidden_layer.nextLayer
+            self.hidden_layers.append(hidden_layer)
+
+        hidden_layer.nextLayer = self.output_layer = Layer(self.amt_output_neurons, self.amt_hidden_neurons, random(), None)
+
     def inspect(self):
-        currentLayer = self.inputLayer
+        """Print string representation of the network"""
+        current_layer = self.input_layer
         print("Network")
         print("=======")
         print("Layers: ")
-        while currentLayer:
-            currentLayer.inspect()
-            currentLayer = currentLayer.nextLayer
+        while current_layer:
+            current_layer.inspect()
+            current_layer = current_layer.nextLayer
 
-    
     def feed_forward(self, _inputs):
         """Adds values to the input nodes of the  network
 
         Args:
             _inputs (numeric): The input values for the  network.
         """
-        self.inputLayer.feed_forward(_inputs)
-    
+        self.input_layer.feed_forward(_inputs)
+
     def train(self, training_inputs, training_outputs, amt_routines=10000):
-        for k in range(amt_routines):
+        for _ in range(amt_routines):
             count = 0
             for x in training_inputs:
                 self.feed_forward(x)
@@ -74,8 +77,6 @@ class Network:
                     # ∂E/∂zⱼ
                     pd_errors_wrt_output_neuron_total_net_input[o] = self.output_layer.neurons[o].calculate_pd_error_wrt_total_net_input(training_outputs[count])
 
-                
-
                 # 3. Update output neuron weights
                 for o in range(len(self.output_layer.neurons)):
                     for w_ho in range(len(self.output_layer.neurons[o].weights)):
@@ -85,7 +86,7 @@ class Network:
 
                         # Δw = α * ∂Eⱼ/∂wᵢ
                         self.output_layer.neurons[o].weights[w_ho] -= self.LEARNING_RATE * pd_error_wrt_weight
-                
+
                 for layer in self.hidden_layers:
                     # 2. Hidden neuron deltas
                     pd_errors_wrt_hidden_neuron_total_net_input = [0] * len(layer.neurons)
