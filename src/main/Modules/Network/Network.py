@@ -27,7 +27,6 @@ class Network:
         self.output_layer = None
         self.hidden_layers = []
         self.initialise_layers()
-        self.train([[random(), random()] for i in range(5)], [1, 0, 1, 1, 0])
 
     def initialise_layers(self):
         """Initializes the network layers.
