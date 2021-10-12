@@ -1,7 +1,7 @@
 import unittest
 from main.modules.network.network import Network
 
-class network_spec(unittest.TestCase):
+class network_test(unittest.TestCase):
     def can_create_network(self):
         network = Network(2, 3, 3, 1)
         self.assertEqual(network.amt_hidden_layers, 3)

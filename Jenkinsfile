@@ -10,7 +10,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'python -m coverage run --rcfile=.coveragerc -m unittest discover -s src -p "*_spec.py" --verbose -b'
+                sh 'python -m coverage run --rcfile=.coveragerc -m unittest discover -s src -p "*_test.py" --verbose -b'
                 sh 'python -m coverage html --rcfile=.coveragerc'
             }
         }
